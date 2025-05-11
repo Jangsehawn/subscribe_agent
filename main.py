@@ -14,9 +14,15 @@ load_dotenv()
 # 프로젝트 이름
 logging.langsmith("Perplexity")
 
-st.title("Perplexity 💬")
+st.set_page_config(
+    page_title="뉴스 대응전략",
+    page_icon="📊",
+)
+
+st.title("뉴스 대응전략")
+
 st.markdown(
-    "LLM에 **웹검색 기능** 을 추가한 [Perplexity](https://www.perplexity.ai/) 클론 입니다. _멀티턴_ 대화를 지원합니다."
+    "LLM에 **웹검색 기능** 을 추가한 뉴스 대응전략 에이전트입니다."
 )
 
 # 대화기록을 저장하기 위한 용도로 생성
@@ -36,35 +42,18 @@ with st.sidebar:
     # 초기화 버튼 생성
     clear_btn = st.button("대화 초기화")
 
-    st.markdown("made by [@teddynote](https://youtube.com/c/teddynote)")
-
-    # 모델 선택 메뉴
-    selected_model = st.selectbox("LLM 선택", ["gpt-4o", "gpt-4o-mini"], index=0)
-
     # 검색 결과 개수 설정
     search_result_count = st.slider("검색 결과", min_value=1, max_value=10, value=3)
 
     # include_domains 설정
     st.subheader("검색 도메인 설정")
     search_topic = st.selectbox("검색 주제", ["general", "news"], index=0)
-    new_domain = st.text_input("추가할 도메인 입력")
-    col1, col2 = st.columns([3, 1])
-    with col1:
-        if st.button("도메인 추가", key="add_domain"):
-            if new_domain and new_domain not in st.session_state["include_domains"]:
-                st.session_state["include_domains"].append(new_domain)
-
-    # 현재 등록된 도메인 목록 표시
-    st.write("등록된 도메인 목록:")
-    for idx, domain in enumerate(st.session_state["include_domains"]):
-        col1, col2 = st.columns([3, 1])
-        with col1:
-            st.text(domain)
-        with col2:
-            if st.button("삭제", key=f"del_{idx}"):
-                st.session_state["include_domains"].pop(idx)
-                st.rerun()
-
+    
+    # 검색 가능 도메인 입력
+    domains = ['google.com','naver.com']
+    for new_domain in domains:
+        st.session_state["include_domains"].append(new_domain)
+    
     # 설정 버튼
     apply_btn = st.button("설정 완료", type="primary")
 
@@ -97,7 +86,7 @@ def add_message(role, message, msg_type="text", tool_name=""):
                 msg_type="text",
                 tool_name=tool_name,
             )
-        )
+         )
     elif msg_type == "tool_result":
         st.session_state["messages"].append(
             ChatMessageWithType(
@@ -108,7 +97,6 @@ def add_message(role, message, msg_type="text", tool_name=""):
                 tool_name=tool_name,
             )
         )
-
 
 # 초기화 버튼이 눌리면...
 if clear_btn:
@@ -130,7 +118,7 @@ if apply_btn:
     tool.include_domains = st.session_state["include_domains"]
     tool.topic = search_topic
     st.session_state["react_agent"] = create_agent_executor(
-        model_name=selected_model,
+        model_name="gpt-4o",
         tools=[tool],
     )
     st.session_state["thread_id"] = random_uuid()
@@ -155,7 +143,7 @@ if user_input:
                 agent,
                 {
                     "messages": [
-                        ("human", user_input),
+                        ("human", user_input.replace("2023", "")),
                     ]
                 },
                 config,

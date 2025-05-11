@@ -2,7 +2,7 @@
 
 # 사용자 정의 테마가 상속받을 Streamlit 기본 테마입니다.
 # "light" 또는 "dark" 중 하나를 선택할 수 있습니다.
-base = "light"
+base = "dark"
 
 # 대화형 요소에 사용되는 기본 강조 색상입니다.
 primaryColor = "#027373"
