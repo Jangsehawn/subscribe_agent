@@ -1,5 +1,7 @@
 # 프로젝트 소개
 
+구독 서비스 매니저가 궁금한 것을 질문할 수 있는 서비스입니다
+
 본 프로젝트는 Fastcampus 강의 중 제공되는 프로젝트를 참고하여 개발하였습니다
 
 - 강의: [RAG 비법노트](https://fastcampus.co.kr/data_online_teddy)
